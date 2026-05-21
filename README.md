@@ -1,0 +1,2 @@
+# Design-and-Verification-of-AXI-Master-Slave-VIP-using-SystemVerilog-and-UVM-
+Developed and verified a reusable AXI Master–Slave Verification IP (VIP) for AMBA AXI protocol validation. Implemented master and slave components with UVM-based architecture and constrained-random stimulus to verify read &amp; write transactions, handshaking, data integrity, and response behavior across multiple scenarios.
