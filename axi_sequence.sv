@@ -4,8 +4,6 @@ class axi_top_sequence extends uvm_sequence#(axi_tx);
 		super.new(name);
 	endfunction 
 	//moe gnric configurations we need to incldue (we need to genrate
-	//address range from 0 to 2000 only this will be applicable all
-	//sequenced 
 endclass
 
 //---------------------------------------------------------------------------------------------
@@ -17,6 +15,7 @@ class bring_up_sequence extends axi_top_sequence;
 	function new(string name="");
 		super.new(name);
 	endfunction 
+	
 	task body();
 		`uvm_do_with(req,{req.w_r==WRITE_THEN_READ; req.awaddr==8; req.awvalid==1; req.wvalid==1; req.wid==awid; req.awburst==1; req.awsize==3; req.awlen==3; req.araddr==req.awaddr; req.arlen==req.awlen; req.arsize==req.awsize; req.arburst==1; req.arvalid==1;});
 	endtask
@@ -35,6 +34,7 @@ class increment_aligned_sequence extends axi_top_sequence;
 	function new(string name="");
 		super.new(name);
 	endfunction 
+	
 	task body();
 		for(int i=0; i<10; i++)begin 	
 		`uvm_do_with(req,{req.w_r==WRITE_THEN_READ;awaddr<9000; (awaddr % 2**awsize)==0; req.awvalid==1; req.wvalid==1; req.wid==awid; req.awburst==1; req.awsize==3; req.awlen==3; req.araddr==req.awaddr; req.arlen==req.awlen; req.arsize==req.awsize; req.arburst==1; req.arvalid==1;});
@@ -58,6 +58,7 @@ class increment_aligned_narrow_sequence extends axi_top_sequence;
 	function new(string name="");
 		super.new(name);
 	endfunction 
+	
 	task body();
 		for(int i=0; i<10; i++)begin 	
 		`uvm_do_with(req,{req.w_r==WRITE_THEN_READ;awaddr<9000; (awaddr % 2**awsize)==0; req.awvalid==1; req.wvalid==1; req.wid==awid; req.awburst==1; req.awsize<=2; req.awlen==3; req.araddr==req.awaddr; req.arlen==req.awlen; req.arsize==req.awsize; req.arburst==1; req.arvalid==1;});
@@ -78,6 +79,7 @@ class increment_unaligned_sequence extends axi_top_sequence;
 	function new(string name="");
 		super.new(name);
 	endfunction 
+	
 	task body();
 		for(int i=0; i<10; i++)begin 	
 		`uvm_do_with(req,{req.w_r==WRITE_THEN_READ;awaddr<9000; (awaddr % 2**awsize)!=0; req.awvalid==1; req.wvalid==1; req.wid==awid; req.awburst==1; req.awsize==3; req.awlen==3; req.araddr==req.awaddr; req.arlen==req.awlen; req.arsize==req.awsize; req.arburst==1; req.arvalid==1;});
@@ -99,7 +101,8 @@ class increment_genric_sequence extends axi_top_sequence;
 	int size;
 	function new(string name="");
 		super.new(name);
-	endfunction 
+	endfunction
+	
 	task body();
 		for(int i=0; i<10; i++)begin 	
 		`uvm_do_with(req,{req.w_r==WRITE_THEN_READ;awaddr<9000; req.awvalid==1; req.wvalid==1; req.wid==awid; req.awburst==1; req.awsize<=3; req.araddr==req.awaddr; req.arlen==req.awlen; req.arsize==req.awsize; req.arburst==1; req.arvalid==1;});
@@ -117,12 +120,13 @@ endclass
 class overlaping_sequence extends axi_top_sequence;//overlapping+ aligned+unaligned+incremnt 
 	`uvm_object_utils(overlaping_sequence)
 
-		function new(string name="");
+	function new(string name="");
 		super.new(name);
 	endfunction 
 	axi_tx tx[$];
 	int a;
 	int b[$];
+	
 	task body();
 		for(int i=0; i<10; i++)begin 
 		a=$urandom_range(0,9000000);	
@@ -142,12 +146,13 @@ endclass
 class overlaping_100_w_r_sequence extends axi_top_sequence;//overlapping+ aligned+unaligned+incremnt 
 	`uvm_object_utils(overlaping_100_w_r_sequence)
 
-		function new(string name="");
+	function new(string name="");
 		super.new(name);
 	endfunction 
 	axi_tx tx[$];
 	int a;
 	int b[$];
+	
 	task body();
 		for(int i=0; i<100; i++)begin 
 		a=$urandom_range(0,9000000);	
@@ -163,16 +168,17 @@ class overlaping_100_w_r_sequence extends axi_top_sequence;//overlapping+ aligne
 endclass
 
 //-----------------------------------------------------------------------------------------------------------
-//TESTCASE 8: INTERLEAVING WRITE ONLY
+//Sequence 8: INTERLEAVING WRITE ONLY
 class interleaving_write_only_sequence extends axi_top_sequence;//overlapping+ aligned+unaligned+incremnt 
 	`uvm_object_utils(interleaving_write_only_sequence)
 
-		function new(string name="");
+	function new(string name="");
 		super.new(name);
 	endfunction 
 	axi_tx tx[$];
 	int a;
 	int b[$];
+	
 	task body();
 		for(int i=0; i<10; i++)begin 
 		a=$urandom_range(0,9000000);	
@@ -184,18 +190,19 @@ class interleaving_write_only_sequence extends axi_top_sequence;//overlapping+ a
 endclass
 //--------------------------------
 //
-//TESTCASE9 : 10 write and read interleving + out of order testcase
+//Sequence 9 : 10 write and read interleving + out of order testcase
 //+ overlapping + increment + aligned + unaligned
 
 class interleaving_wr_rd_sequence extends axi_top_sequence;//overlapping+ aligned+unaligned+incremnt 
 	`uvm_object_utils(interleaving_wr_rd_sequence)
 
-		function new(string name="");
+	function new(string name="");
 		super.new(name);
 	endfunction 
 	axi_tx tx[$];
 	int a;
 	int b[$];
+	
 	task body();
 		for(int i=0; i<10; i++)begin 
 		a=$urandom_range(0,9000000);	
@@ -208,22 +215,24 @@ class interleaving_wr_rd_sequence extends axi_top_sequence;//overlapping+ aligne
 		`uvm_do_with(req,{req.w_r==READ_ONLY; req.araddr==b[i]; req.arvalid==1; req.arburst==tx[i].awburst; req.arsize==tx[i].awsize; req.arlen==tx[i].awlen;});
 	       end
 	endtask
+	
 endclass
 
 
 //-------------------------------------------------------
-//TESTCASE10 : 100 write and read interleving + out of order testcase
+//Sequence 10 : 100 write and read interleving + out of order testcase
 //+ overlapping + increment + aligned + unaligned
 
 class interleaving_100_wr_rd_sequence extends axi_top_sequence;//overlapping+ aligned+unaligned+incremnt 
 	`uvm_object_utils(interleaving_100_wr_rd_sequence)
 
-		function new(string name="");
+	function new(string name="");
 		super.new(name);
 	endfunction 
 	axi_tx tx[$];
 	int a;
 	int b[$];
+	
 	task body();
 		for(int i=0; i<100; i++)begin 
 		a=$urandom_range(0,9000000);	
@@ -236,13 +245,13 @@ class interleaving_100_wr_rd_sequence extends axi_top_sequence;//overlapping+ al
 		`uvm_do_with(req,{req.w_r==READ_ONLY; req.araddr==b[i]; req.arvalid==1; req.arburst==tx[i].awburst; req.arsize==tx[i].awsize; req.arlen==tx[i].awlen;});
 	       end
 	endtask
+	
 endclass
 
 
 //----------------------------------------------------------------------------------
 
 //Sequence 11
-////Sequence1
 //multiple write and read bring up sequence (Aligned address, full strobe
 //enable, alwne=3)
 class wrap_wr_rd_sequence extends axi_top_sequence;
@@ -250,24 +259,27 @@ class wrap_wr_rd_sequence extends axi_top_sequence;
 	function new(string name="");
 		super.new(name);
 	endfunction 
+	
 	task body();
 		`uvm_do_with(req,{req.w_r==WRITE_THEN_READ; req.awaddr==8; req.awvalid==1; req.wvalid==1; req.wid==awid; req.awburst==2; req.awsize==3; req.awlen==3; req.araddr==req.awaddr; req.arlen==req.awlen; req.arsize==req.awsize; req.arburst==2; req.arvalid==1;});
 	endtask
+	
 endclass
 
 //---------------------------------------------------------------------------------
 
-//TESTCASE12  wrap transaction 100 write and read, overlapping, inteleving,
+//Sequence 12 wrap transaction 100 write and read, overlapping, inteleving,
 //out of order
 class wrap_100_wr_rd_sequence extends axi_top_sequence;//overlapping+ aligned+unaligned+incremnt 
 	`uvm_object_utils(wrap_100_wr_rd_sequence)
 
-		function new(string name="");
+	function new(string name="");
 		super.new(name);
 	endfunction 
 	axi_tx tx[$];
 	int a;
 	int b[$];
+	
 	task body();
 		for(int i=0; i<100; i++)begin 
 		a=$urandom_range(0,9000000);
@@ -281,6 +293,7 @@ class wrap_100_wr_rd_sequence extends axi_top_sequence;//overlapping+ aligned+un
 		`uvm_do_with(req,{req.w_r==READ_ONLY; req.araddr==b[i]; req.arvalid==1; req.arburst==tx[i].awburst; req.arsize==tx[i].awsize; req.arlen==tx[i].awlen;});
 	       end
 	endtask
+	
 endclass
 
 
