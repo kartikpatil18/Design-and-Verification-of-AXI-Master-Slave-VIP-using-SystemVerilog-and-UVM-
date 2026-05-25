@@ -1,8 +1,10 @@
 class axi_master_monitor extends uvm_monitor;
-		`uvm_component_utils(axi_master_monitor)
+	`uvm_component_utils(axi_master_monitor)
+	
 	function new(string name="", uvm_component parent=null);
 		super.new(name,parent);
 	endfunction
+	
     //get pointed virtual interface from top module 
     virtual axi_interface m_vif;
     //TLM 
@@ -22,6 +24,7 @@ class axi_master_monitor extends uvm_monitor;
 	     forever begin 
 		     @(negedge m_vif.aclk);//signals statble 
 		     tx=axi_tx::type_id::create("tx",this);
+			 
 		     //write address channel
 		     tx.awaddr=m_vif.awaddr;
 		     tx.awid=m_vif.awid;
@@ -33,6 +36,7 @@ class axi_master_monitor extends uvm_monitor;
 		     tx.awprot=m_vif.awprot;
 		     tx.awburst=m_vif.awburst;
 		     tx.awcache=m_vif.awcache;
+			 
 		     //write data 
 		     tx.wdata.push_back(m_vif.wdata);
 		     tx.wvalid = m_vif.wvalid;
@@ -40,11 +44,13 @@ class axi_master_monitor extends uvm_monitor;
 		     tx.wid = m_vif.wid;
 		     tx.wstrb = m_vif.wstrb;
 		     tx.wlast = m_vif.wlast;
+			 
 		     //write response 
 		     tx.bid=m_vif.bid;
 		     tx.bvalid=m_vif.bvalid;
 		     tx.bready=m_vif.bready;
 		     tx.bresp=m_vif.bresp;
+			 
 		     //read address
 		     tx.araddr=m_vif.araddr;
 		     tx.arid=m_vif.arid;
@@ -56,6 +62,7 @@ class axi_master_monitor extends uvm_monitor;
 		     tx.arprot=m_vif.arprot;
 		     tx.arburst=m_vif.arburst;
 		     tx.arcache=m_vif.arcache;
+			 
 		     //read data channel 
 		     tx.rdata=m_vif.rdata;
 		     tx.rvalid=m_vif.rvalid;
@@ -63,10 +70,11 @@ class axi_master_monitor extends uvm_monitor;
 		     tx.rid=m_vif.rid;
 		     tx.rresp=m_vif.rresp;
 		     tx.rlast=m_vif.rlast;
+			 
 		     //send tx to scoereboard or coverage 
 		     tlm_mon.write(tx);
 	     end        
      endtask
 endclass
 
-//will do all logic 
+
