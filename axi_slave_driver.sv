@@ -83,8 +83,9 @@ task run_phase(uvm_phase phase);
 			  v_s_intf.wready<=1;
 			    wdata_burst_width_in_bytes = ($size(v_s_intf.wdata)/8); //4
 			    $display("Write awaddr=%h wdata=%h time=%t", wr_tx[v_s_intf.wid].awaddr, v_s_intf.wdata,$time);
-
-			  if(wr_tx[v_s_intf.wid].awburst==1)begin //INCR TRANSACTION  wr_tx[500].awburst
+              
+			  //INCR TRANSACTION 
+			  if(wr_tx[v_s_intf.wid].awburst==1)begin  
 				  //how many beats of data we need to genrate 	
                                     count=0;
                                     for(int i=0; i<=wdata_burst_width_in_bytes; i++)begin //4 times
@@ -277,25 +278,9 @@ task run_phase(uvm_phase phase);
      end //aligned      
       end//arburst
 
-
-
-
-
-
       end
-
-
-
 		 	   end 	//rst   
 	end//forver 
 endtask
        
 endclass
-
-
-
-//DRAM SLAVE VIP (acts a normal drma bnak group, banks, Row address & culumn
-//address )    x8 16G x1R  DRAM CHIP 
-//
-//
-//    AXI VIP (PCIE PORTS) ---------> ddr_controller+phy    ------->  DRAM VIP (NORMAL DRAM CHIP)
